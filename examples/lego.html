@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .__pointer_el {
+      background-color: black;
+    }
+    .__clock_el {
+      display: inline-block;
+      border: 1px solid black;
+      border-radius: 50%;
+      box-sizing: border-box;
+    }
+
+    #container {
+      width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <button id="addD1">d1 + 1</button>
+  <button id="addD2">d2 + 1</button>
+  <button id="get">导出</button>
+  <pre>
+    <code id="resultEl">
+
+    </code>
+  </pre>
+  <script type="module">
+    import {createClockElement} from '../components/clock/index.js'
+    import numbers from '../components/number/enum.js'
+
+    let current = null;
+    const buffer = 45;
+    const n = numbers[0];
+
+    for (let i = 0; i < 24; i ++) {
+      const {el, setPointerAngle} = createClockElement({
+        width: '100px',
+        d1: n[i].d1,
+        d2: n[i].d2
+      });
+      el.d1 = n[i].d1, el.d2 = n[i].d2;
+      el.setAngle = () => {
+        setPointerAngle(el.d1, el.d2);
+      }
+      container.appendChild(el);
+    }
+
+    container.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('__clock_el')) {
+        return;
+      }
+      if (current) {
+        current.style.backgroundColor = 'white';
+      }
+      current = e.target;
+      current.style.backgroundColor = 'red';
+    });
+
+    addD1.addEventListener('click', () => {
+      if (current) {
+        current.d1 += buffer;
+        current.setAngle();
+      }
+    });
+
+    addD2.addEventListener('click', () => {
+      if (current) {
+        current.d2 += buffer;
+        current.setAngle();
+      }
+    });
+
+    get.addEventListener('click', () => {
+      const result = [];
+      for (let i = 0; i < container.children.length; i ++) {
+        const el = container.children[i];
+        result.push({
+          d1: el.d1,
+          d2: el.d2
+        });
+      }
+      resultEl.innerText = JSON.stringify(result, null, 4);
+    });
+  </script>
+</body>
+</html>

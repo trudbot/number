@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html, body {
+      height: 100vh;
+      overflow: scroll;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #container {
+      display: flex;
+    }
+
+    .number-group {
+      margin-right: 3vw;
+      display: flex;
+      gap: 1vw;
+    }
+
+    .__pointer_el {
+      background-color: black;
+    }
+    .__clock_el {
+      display: inline-block;
+      /* border: 1px solid #333; */
+      /* border-radius: 50%;
+      box-sizing: border-box;
+      background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1), 0 0 15px rgba(0, 0, 0, 0.2);  */
+    }
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script type="module">
+    import {createNumberElement} from '../components/number/index.js'
+    // 解析出当前时间的hh, mm, ss, 两位数， 不足补0
+    const parseTime = () => {
+      const date = new Date();
+      const hh = date.getHours();
+      const mm = date.getMinutes();
+      const ss = date.getSeconds();
+      return {
+        hh,
+        mm,
+        ss
+      }
+    }
+
+    const numberList = [];
+    const numberWidth = '12vw';
+    (() => {
+      function createNumberGroup() {
+        const group = document.createElement('div');
+        group.classList.add('number-group');
+        const n1 = createNumberElement({number: 0, width: numberWidth});
+        const n2 = createNumberElement({number: 0, width: numberWidth});
+        group.append(n1.el, n2.el);
+        numberList.push(n1, n2);
+        return group;
+      }
+      container.append(createNumberGroup(), createNumberGroup(), createNumberGroup());
+    })();
+
+    function updateNumbers() {
+      if (numberList.length !== 6) return;
+      const {hh, mm, ss} = parseTime();
+      const hh1 = Math.floor(hh / 10);
+      const hh2 = hh % 10;
+      const mm1 = Math.floor(mm / 10);
+      const mm2 = mm % 10;
+      const ss1 = Math.floor(ss / 10);
+      const ss2 = ss % 10;
+      numberList[0].changeNumberValue(hh1);
+      numberList[1].changeNumberValue(hh2);
+      numberList[2].changeNumberValue(mm1);
+      numberList[3].changeNumberValue(mm2);
+      numberList[4].changeNumberValue(ss1);
+      numberList[5].changeNumberValue(ss2);
+    }
+
+    setInterval(() => {
+      updateNumbers();
+    }, 1000);
+
+  </script>
+</body>
+</html>

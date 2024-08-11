@@ -1,12 +1,27 @@
 {
   "name": "@trudbot/number",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.js"
+    }
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c"
   },
   "author": "",
   "license": "MIT",
-  "homepage": "https://github.com/trudbot/number"
+  "homepage": "https://github.com/trudbot/number",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.20.0",
+    "rollup-plugin-sizes": "^1.0.6"
+  },
+  "files": [
+    "lib/index.js"
+  ]
 }
